@@ -1,0 +1,25 @@
+severity:
+  human_review_threshold: 80
+  low_confidence_threshold: 0.55
+  force_review_keywords:
+    - trapped
+    - injured
+    - collapse
+    - explosion
+    - tsunami
+    - earthquake
+    - landslide
+    - accident
+    - chemical
+    - medical
+
+security:
+  blocked_patterns:
+    - "ignore previous instructions"
+    - "reveal system prompt"
+    - "bypass safety"
+    - "exfiltrate"
+
+pii:
+  redact_phone: true
+  redact_email: true

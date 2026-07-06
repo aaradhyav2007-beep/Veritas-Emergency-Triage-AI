@@ -1,0 +1,13 @@
+streamlit
+fastapi
+uvicorn
+pydantic
+python-dotenv
+pyyaml
+pytest
+pandas
+google-adk==2.3.0
+google-genai==2.10.0
+requests
+mcp
+Pillow

@@ -1,0 +1,18 @@
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# ADK runtime state
+adk/.adk/
+
+# OS
+.DS_Store
+
+# Streamlit
+.streamlit/secrets.toml

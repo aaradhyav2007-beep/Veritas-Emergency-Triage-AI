@@ -1,0 +1,20 @@
+{
+  "Local notification": {"category": "Low", "description": "Automated alert to local community/neighborhood watch channel."},
+  "Police unit": {"category": "Medium", "description": "Patrol unit dispatched for on-site assessment and crowd/traffic safety."},
+  "Traffic control": {"category": "Medium", "description": "Traffic management team to secure the area and reroute vehicles."},
+  "Fire brigade": {"category": "High", "description": "Fire suppression unit for active fire or smoke hazards."},
+  "Ambulance": {"category": "High", "description": "Emergency medical transport for injured persons."},
+  "Multi-unit fire response": {"category": "Critical", "description": "Coordinated multi-truck fire response for large-scale fires."},
+  "Advanced life support ambulance": {"category": "Critical", "description": "ALS-equipped ambulance for critical/life-threatening injuries."},
+  "Police command": {"category": "Critical", "description": "Senior police command unit to coordinate a large-scale response."},
+  "Disaster management cell": {"category": "Critical", "description": "District/state disaster management coordination team."},
+  "Bomb disposal squad": {"category": "Hazard-specific", "description": "Specialist team for suspected explosive devices."},
+  "HazMat unit": {"category": "Hazard-specific", "description": "Hazardous materials containment and decontamination team."},
+  "Water rescue team": {"category": "Hazard-specific", "description": "Swift-water/flood rescue specialists."},
+  "Boat unit": {"category": "Hazard-specific", "description": "Boat-equipped unit for flood or coastal incidents."},
+  "Urban search and rescue (USAR)": {"category": "Hazard-specific", "description": "Structural collapse / trapped-victim search and rescue team."},
+  "Structural engineer": {"category": "Hazard-specific", "description": "On-call engineer to assess building/structural safety."},
+  "Paramedic team": {"category": "Hazard-specific", "description": "Field paramedic team for mass-casualty or injury-heavy incidents."},
+  "Coastal evacuation team": {"category": "Hazard-specific", "description": "Coordinates rapid evacuation of coastal/low-lying areas."},
+  "Heavy equipment team": {"category": "Hazard-specific", "description": "Excavators/cranes for landslide or debris clearance."}
+}
