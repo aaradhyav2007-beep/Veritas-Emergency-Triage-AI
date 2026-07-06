@@ -49,36 +49,51 @@ a *missing* piece of evidence (and lowers confidence accordingly), never as
 
 ## Architecture
 
-```
-Citizen report
-      │
-      ▼
-┌─────────────────────┐   guardrails/safety.py
-│   Guardrail check    │──▶ blocks prompt injection, redacts PII in outputs
-└─────────┬───────────┘
-          ▼
-┌─────────────────────┐
-│ Verification Agent   │──▶ skills/weather_geo_verify.py (location + live weather)
-│ agents/verification_ │──▶ skills/ai_reasoning.py       (Gemini second opinion)
-│ agent.py              │──▶ skills/corroboration.py      (audit-log cross-check)
-└─────────┬───────────┘
-          ▼
-┌─────────────────────┐
-│    Triage Agent       │──▶ skills/severity_score.py  (rule + AI + boosts → final score)
-│ agents/triage_agent.py│──▶ skills/resource_mapper.py  (severity → response units)
-└─────────┬───────────┘
-          ▼
-┌─────────────────────┐
-│   Evidence Engine     │──▶ skills/evidence_engine.py (verdict + recommendation)
-│ skills/evidence_engine│──▶ skills/incident_credibility.py
-└─────────┬───────────┘
-          ▼
-┌─────────────────────┐
-│   Comms Agent         │──▶ skills/translate_dispatch.py (dispatch text, optional
-│ agents/comms_agent.py │    Gemini translation to Hindi/Spanish)
-└─────────┬───────────┘
-          ▼
-  Dispatch decision + full audit trail (data/incidents.jsonl)
+         Citizen report
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │  Which engine?        │
+                    └──────────┬───────────┘
+                 ┌──────────────┴──────────────┐
+                 ▼                              ▼
+   CUSTOM PIPELINE (deterministic)   ADK AGENT (Gemini decides)
+   ┌─────────────────────┐           ┌─────────────────────────┐
+   │  Guardrail Agent    │           │  root_agent (Gemini)    │
+   │  ── prompt-injection│           │  decides at runtime:    │
+   │     detection, PII  │           │ • call full_emergency_  │
+   │     redaction       │           │   assessment tool, OR   │
+   └─────────┬───────────┘           │ • delegate to Verification│
+             ▼                       │    sub-agent, OR        │
+   ┌─────────────────────--┐         │ • call MCP tool         │
+   │ Verification Agent    │         │ verify_location_weather │
+   │ ── geocoding + live   │         └──────────┬──────────────┘
+   │     weather           │                      │
+   │ ── live river         │                    ▼
+   │     discharge (flood) │          ┌─────────────────────────┐
+   │ ── live seismic       │          │ MCP Server (subprocess) │
+   │     activity (USGS)   │          │ mcp_server/server.py    │
+   │ ── independent Gemini │◀──────── │ exposes verify_location_│
+   │     reasoning (+ image)│  same   │ weather as an MCP too   │
+   │ ── multi-report       │   skill  │ over stdio              │
+   │     corroboration     │   module └─────────────────────────┘
+   └─────────┬───────────--┘
+             ▼
+   ┌─────────────────────┐
+   │    Triage Agent         │──▶ rule + AI + verification boosts → final score
+   │                         │──▶ hazard-specific response unit mapping
+   └─────────┬───────────┘
+             ▼
+   ┌─────────────────────┐
+   │   Evidence Engine       │──▶ 7-signal verdict + recommendation
+   │                         │──▶ report credibility scoring
+   └─────────┬───────────┘
+             ▼
+   ┌─────────────────────┐
+   │   Comms Agent           │──▶ dispatch message + optional Gemini translation
+   └─────────┬───────────┘
+             ▼
+     Dispatch decision + full audit trail
 ```
 
 `agents/orchestrator.py` (`process_incident`) wires all of the above together
