@@ -19,7 +19,7 @@ weather_mcp_toolset = McpToolset(
 
 root_agent = Agent(
     name="veritas",
-    model="gemini-2.5-flash",
+    model="gemini-3.5-flash",
     description="Root agent for the Veritas Emergency Decision Support System.",
     instruction="""
 You are Veritas, an AI-powered Emergency Decision Support System.

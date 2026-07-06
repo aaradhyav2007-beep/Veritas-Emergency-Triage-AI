@@ -21,7 +21,7 @@ from google.genai import types
 
 logger = logging.getLogger(__name__)
 
-MODEL_NAME = "gemini-2.5-flash"
+MODEL_NAME = "gemini-3.5-flash"
 
 _SAFE_DEFAULTS = {
     "ai_score": None,

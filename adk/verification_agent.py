@@ -28,7 +28,7 @@ def verify_incident(
 
 verification_agent = Agent(
     name="verification_agent",
-    model='gemini-2.5-flash',
+    model='gemini-3.5-flash',
     description="Verifies emergency incidents.",
     instruction="""
     You are the Verification Agent for Veritas.
