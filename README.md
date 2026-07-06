@@ -49,52 +49,7 @@ a *missing* piece of evidence (and lowers confidence accordingly), never as
 
 ## Architecture
 
-         Citizen report
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │  Which engine?        │
-                    └──────────┬───────────┘
-                 ┌──────────────┴──────────────┐
-                 ▼                              ▼
-   CUSTOM PIPELINE (deterministic)   ADK AGENT (Gemini decides)
-   ┌─────────────────────┐           ┌─────────────────────────┐
-   │  Guardrail Agent    │           │  root_agent (Gemini)    │
-   │  ── prompt-injection│           │  decides at runtime:    │
-   │     detection, PII  │           │ • call full_emergency_  │
-   │     redaction       │           │   assessment tool, OR   │
-   └─────────┬───────────┘           │ • delegate to Verification│
-             ▼                       │    sub-agent, OR        │
-   ┌─────────────────────--┐         │ • call MCP tool         │
-   │ Verification Agent    │         │ verify_location_weather │
-   │ ── geocoding + live   │         └──────────┬──────────────┘
-   │     weather           │                      │
-   │ ── live river         │                    ▼
-   │     discharge (flood) │          ┌─────────────────────────┐
-   │ ── live seismic       │          │ MCP Server (subprocess) │
-   │     activity (USGS)   │          │ mcp_server/server.py    │
-   │ ── independent Gemini │◀──────── │ exposes verify_location_│
-   │     reasoning (+ image)│  same   │ weather as an MCP too   │
-   │ ── multi-report       │   skill  │ over stdio              │
-   │     corroboration     │   module └─────────────────────────┘
-   └─────────┬───────────--┘
-             ▼
-   ┌─────────────────────┐
-   │    Triage Agent         │──▶ rule + AI + verification boosts → final score
-   │                         │──▶ hazard-specific response unit mapping
-   └─────────┬───────────┘
-             ▼
-   ┌─────────────────────┐
-   │   Evidence Engine       │──▶ 7-signal verdict + recommendation
-   │                         │──▶ report credibility scoring
-   └─────────┬───────────┘
-             ▼
-   ┌─────────────────────┐
-   │   Comms Agent           │──▶ dispatch message + optional Gemini translation
-   └─────────┬───────────┘
-             ▼
-     Dispatch decision + full audit trail
-```
+<img width="1920" height="2600" alt="architecture" src="https://github.com/user-attachments/assets/88061863-f753-4676-bed2-a319e7d11ef8" />
 
 `agents/orchestrator.py` (`process_incident`) wires all of the above together
 and is the single entry point every surface (Streamlit UI, ADK agent, tests)
